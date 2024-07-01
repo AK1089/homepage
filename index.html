@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="background"></div>
+    <div id="content">
+        <h1>Quick Navigation</h1>
+        <p>Click a key or press the corresponding key on your keyboard to navigate:</p>
+        <div id="keyboard"></div>
+        <button id="editButton">Edit Links</button>
+    </div>
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h2>Edit Links</h2>
+            <p>Enter a single URL or comma-separated list of URLs for each key:</p>
+            <div id="editForm"></div>
+            <button id="saveButton">Save</button>
+            <button id="cancelButton">Cancel</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

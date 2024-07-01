@@ -1,0 +1,151 @@
+body,
+html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+}
+
+#background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('background.png');
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+}
+
+#content {
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 18px;
+    border-radius: 9px;
+    max-width: 720px;
+    margin: 45px auto;
+    text-align: center;
+    max-height: calc(100vh - 90px);
+    overflow-y: auto;
+}
+
+#keyboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4.5px;
+    margin-top: 18px;
+}
+
+.keyboard-row {
+    display: flex;
+    gap: 4.5px;
+}
+
+.key {
+    width: 45px;
+    height: 45px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4.5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.key:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 9px rgba(0, 0, 0, 0.1);
+}
+
+.key-letter {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    font-size: 9px;
+    color: #666;
+}
+
+.favicon {
+    max-width: 60%;
+    max-height: 60%;
+}
+
+.folder-icon {
+    max-width: 40%;
+    max-height: 40%;
+    margin-bottom: 2px;
+}
+
+.favicon-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+}
+
+.mini-favicon {
+    width: 8px;
+    height: 8px;
+}
+
+.row-1 {
+    margin-left: 0;
+}
+
+.row-2 {
+    margin-left: 50px;
+}
+
+.row-3 {
+    margin-left: 40px;
+}
+
+.row-4 {
+    margin-left: -10px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    overflow-y: auto;
+    border-radius: 8px;
+    padding-top: -10px;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15px auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+    padding-top: -10px;
+}
+
+#editForm {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#editButton,
+#saveButton,
+#cancelButton {
+    margin-top: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
