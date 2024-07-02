@@ -15,24 +15,35 @@ const keyboardLayout = [
     'zxcvbnm'
 ];
 
+function parseLinks(linkString) {
+    const links = linkString.split(',').map(link => "https://" + link.trim().replace(/^(https?:\/\/)?(www\.)?/i, ''));
+    return links.map(link => {
+        const match = link.match(/^(.*?)(?:\[(.*?)\])?$/);
+        return {
+            url: match[1],
+            favicon: match[2] || null
+        };
+    });
+}
+
 function createKeyboard() {
     const keyboardElement = document.getElementById('keyboard');
     keyboardElement.innerHTML = '';
     keyboardLayout.forEach((row, rowIndex) => {
         const rowElement = document.createElement('div');
         rowElement.className = `keyboard-row row-${rowIndex + 1}`;
-        
+
         row.split('').forEach(letter => {
             const keyElement = document.createElement('div');
             keyElement.className = 'key';
-            
+
             const letterSpan = document.createElement('span');
             letterSpan.className = 'key-letter';
             letterSpan.textContent = letter;
             keyElement.appendChild(letterSpan);
 
             if (keyMap[letter]) {
-                const links = keyMap[letter].split(',').map(url => url.trim());
+                const links = parseLinks(keyMap[letter]);
                 if (links.length > 1) {
                     const folderIcon = document.createElement('img');
                     folderIcon.className = 'favicon folder-icon';
@@ -45,21 +56,21 @@ function createKeyboard() {
                     links.slice(0, 4).forEach(link => {
                         const faviconImg = document.createElement('img');
                         faviconImg.className = 'mini-favicon';
-                        faviconImg.src = `https://www.google.com/s2/favicons?domain=${link}&sz=16`;
-                        faviconImg.alt = `Favicon for ${link}`;
+                        faviconImg.src = link.favicon || `https://www.google.com/s2/favicons?domain=${link.url}&sz=16`;
+                        faviconImg.alt = `Favicon for ${link.url}`;
                         faviconContainer.appendChild(faviconImg);
                     });
                     keyElement.appendChild(faviconContainer);
-                } else {
+                } else if (links.length === 1) {
                     const faviconImg = document.createElement('img');
                     faviconImg.className = 'favicon';
-                    faviconImg.src = `https://www.google.com/s2/favicons?domain=${links[0]}&sz=64`;
-                    faviconImg.alt = `Favicon for ${links[0]}`;
+                    faviconImg.src = links[0].favicon || `https://www.google.com/s2/favicons?domain=${links[0].url}&sz=64`;
+                    faviconImg.alt = `Favicon for ${links[0].url}`;
                     keyElement.appendChild(faviconImg);
                 }
 
                 keyElement.addEventListener('click', () => {
-                    openLinks(links);
+                    openLinks(links.map(link => link.url));
                 });
             }
 
