@@ -7,6 +7,7 @@ const defaultKeyMap = {
 
 let keyMap = JSON.parse(localStorage.getItem('keyMap')) || defaultKeyMap;
 let isEditModalOpen = false;
+let backgroundImage = localStorage.getItem('backgroundImage') || 'background.png';
 
 const keyboardLayout = [
     '1234567890',
@@ -16,7 +17,7 @@ const keyboardLayout = [
 ];
 
 function parseLinks(linkString) {
-    const links = linkString.split(',').map(link => "https://" + link.trim().replace(/^(https?:\/\/)?(www\.)?/i, ''));
+    const links = linkString.split(',').map(link => link.trim());
     return links.map(link => {
         const match = link.match(/^(.*?)(?:\[(.*?)\])?$/);
         return {
@@ -94,8 +95,8 @@ function handleKeyPress(event) {
     if (isEditModalOpen || event.metaKey || event.ctrlKey) return;
     const key = event.key.toLowerCase();
     if (key in keyMap && keyMap[key]) {
-        const links = keyMap[key].split(',').map(url => url.trim());
-        openLinks(links);
+        const links = parseLinks(keyMap[key]);
+        openLinks(links.map(link => link.url));
     }
 }
 
@@ -104,16 +105,38 @@ function showEditModal() {
     const editForm = document.getElementById('editForm');
     editForm.innerHTML = '';
 
-    for (const [key, value] of Object.entries(keyMap)) {
+    // Ensure numbers are in the correct order
+    const orderedKeys = "1234567890qwertyuiopasdfghjklzxcvbnm"
+
+    for (const key of orderedKeys) {
         const label = document.createElement('label');
         label.textContent = key.toUpperCase();
         const input = document.createElement('input');
         input.type = 'text';
-        input.value = value;
+        input.value = keyMap[key];
         input.id = `edit-${key}`;
         editForm.appendChild(label);
         editForm.appendChild(input);
     }
+
+    // Add horizontal line
+    const hr = document.createElement('hr');
+    hr.style.margin = '20px 0';
+    editForm.appendChild(hr);
+
+    // Add some space
+    const spacer = document.createElement('div');
+    spacer.style.height = '20px';
+    editForm.appendChild(spacer);
+
+    const label = document.createElement('label');
+    label.textContent = "BG"
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = backgroundImage;
+    input.id = `edit-bg`;
+    editForm.appendChild(label);
+    editForm.appendChild(input);
 
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden';
@@ -132,12 +155,20 @@ function saveLinks() {
         const input = document.getElementById(`edit-${key}`);
         keyMap[key] = input.value;
     }
+    backgroundImage = document.getElementById(`edit-bg`).value;
+    localStorage.setItem('backgroundImage', backgroundImage);
     localStorage.setItem('keyMap', JSON.stringify(keyMap));
     hideEditModal();
     createKeyboard();
+    updateBackground();
+}
+
+function updateBackground() {
+    document.getElementById('background').style.backgroundImage = `url('${backgroundImage}')`;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    updateBackground();
     createKeyboard();
     document.addEventListener('keydown', handleKeyPress);
     document.getElementById('editButton').addEventListener('click', showEditModal);
